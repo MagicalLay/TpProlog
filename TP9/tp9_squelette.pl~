@@ -1,0 +1,27 @@
+/**
+TP 9 Prolog
+
+@author Pierre-Marie AIRIAU
+@version Annee scolaire 2014/2015
+*/
+
+/*
+
+========================================================
+I- Résolution par force brute
+========================================================
+
+
+
+*********************************
+Question 1.1
+*********************************
+
+*/
+
+creerBinomes(_,[],[]).
+creerBinomes(A,[B|Suite],[(A,B)|Suite2]) :- creerBinomes(A,Suite,Suite2). 
+
+combiner([],[]).
+combiner([C1|Suite], [B1|Suite2]) :- creerbinomes(C1, Suite, Suite2),
+		combiner(Suite, Suite2).

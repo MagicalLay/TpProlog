@@ -1,0 +1,71 @@
+/**
+TP 9 Prolog
+
+@author Pierre-Marie AIRIAU
+@version Annee scolaire 2014/2015
+*/
+
+/*
+
+========================================================
+I- Résolution par force brute
+========================================================
+
+
+
+*********************************
+Question 1.1
+*********************************
+
+*/
+
+creerBinomes(A,[B],(A,B)).
+creerBinomes(A,[B,C],[(A,B),(A,C)]) :- !. 
+creerBinomes(A,[B|Suite],[(A,B)|Suite2]) :- creerBinomes(A,Suite,Suite2). 
+
+combiner([],[]).
+combiner([_], []).
+combiner([C1|Suite], [B1|Suite2]) :- creerBinomes(C1, Suite, B1),
+		combiner(Suite, Suite2).
+
+
+/*
+combinaison([C1,C2],[C2],(C1,C2)) :- !.
+combinaison([C1,C2,C3],[C3],[(C1,C3),(C2,C3)]) :- !.
+combinaison([C1,C2|Sc],[C3],[(C1,C3)|B]) :- combinaison([C2|Sc],Sc,B), !.
+combinaison([C1,C2|Sc],[C3|Sc],[(C1,C3)|B]) :- combinaison([C1,C2|Sc],Sc,B).
+
+combiner([],[]).
+combiner([C1,C2],[(C1,C2)]).
+combiner([C|Sc],B) :- combinaison([C|Sc],Sc,B).
+*/
+/*
+
+*******************************
+Question 1.2
+*******************************
+
+*/
+
+extraire([], Nb, [], []).
+extraire([(E1,E2)|Suite], Nb, [(E1,E2)|Suite2], RemainingBinomes) :- not(appartient(E1,Suite2)),
+		not(appartient(E2,Suite2),
+		Nbn is Nb-1,
+		extraire(Suite, Nbn, Suite2, RemainingBinomes).
+
+/*
+
+========================================================
+Tests
+========================================================
+
+**************
+Q 1.1
+**************
+Binomes = [[(pluto, riri), (pluto, fifi), (pluto, loulou)], [(riri, fifi), (riri, loulou)], (fifi, loulou)]
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+No (0.00s cpu)
+
+
+*/

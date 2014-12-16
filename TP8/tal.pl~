@@ -1,0 +1,110 @@
+/**
+TP 8 Traitement Automatique de la Langue (TAL) - Prolog
+
+@author Pierre-Marie AIRIAU
+@version Annee scolaire 2014/2015
+*/
+
+
+/*
+===============================================================================
+===============================================================================
+ Définition des prédicats
+===============================================================================
+*/
+% Afin de simplifier la correction, merci de conserver dans votre grammaire
+% l'ordre ci-dessous
+
+
+phrase_simple(Phrase) :- gp_nominal(Phrase,S1),
+		gp_verbal(S1,[]).
+phrase_simple(Phrase) :- gp_nominal(Phrase,S1),
+		gp_verbal(S1,S2),
+		gp_prepositionnel(S2,[]).
+phrase_simple(Phrase) :- gp_nominal(Phrase,S1),
+		gp_prepositionnel(S1,S2),
+		gp_verbal(S2,[]).
+phrase_simple(Phrase) :- gp_prepositionnel(Phrase,[]).
+
+gp_nominal([Np|Suite],Suite) :- nom_propre(Np).
+gp_nominal(Gn,Suite) :- Gn=[Art|S],
+		article(Art),
+		S=[Nc|Suite],
+		nom_commun(Nc).
+gp_nominal(Gn,Suite) :- Gn=[Art|S],
+		article(Art),
+		S=[Nc|S2],
+		nom_commun(Nc),
+		S2=[Adj|Suite],
+		adjectif(Adj).
+
+gp_verbal([V|Suite],Suite) :- verbe(V).
+gp_verbal(L,Suite) :- L=[V|R],
+		verbe(V),
+		gp_nominal(R,Suite).
+
+gp_prepositionnel(Gp,Suite) :- Gp=[Prep|S],
+		prep(Prep),
+		gp_nominal(S,Suite).
+gp_prepositionnel(Gp,Suite) :- Gp=[Prep|S],
+		prep(Prep),
+		gp_verbal(S,Suite).
+
+%relatif
+
+article(le).
+article(les).
+article(la).
+article(un).
+article(une).
+nom_commun(chien).
+nom_commun(enfants).
+nom_commun(rue).
+nom_commun(femme).
+nom_commun(pull).
+nom_commun(steak).
+nom_propre(paul).
+adjectif(noir).
+prep(qui).
+prep(dans).
+verbe(aboie).
+verbe(jouent).
+verbe(marche).
+verbe(porte).
+verbe(mange).
+%pronom
+
+analyse(Phrase) :- phrase_simple(Phrase).
+        
+/*
+
+analyse([le,chien,aboie]).
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+No (0.00s cpu)
+
+analyse([les,enfants,jouent]).
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+No (0.00s cpu)
+
+
+*/
+
+/*
+===============================================================================
+===============================================================================
+ Tests
+===============================================================================
+*/
+
+% Quelques phrases de test à copier coller pour vous faire gagner du temps, mais
+% n'hésitez pas à en définir d'autres
+
+/*
+analyse([le,chien,aboie]).
+analyse([les,enfants,jouent]).
+analyse([paul,marche,dans,la,rue]).
+analyse([la,femme,qui,porte,un,pull,noir,mange,un,steack]).
+analyse([les,chien,aboie]).
+analyse([la,femme,qui,porte,un,pull,noir,mange,un,chien]).              
+
+*/
