@@ -1,0 +1,14 @@
+/**
+TP Listes Prolog
+
+@author Pierre-Marie AIRIAU
+@version Annee scolaire 2014/2015
+*/
+
+/**Question 1.1*/
+
+membre(A,[X|U]):- membre(A,U).
+membre(A,[A|U]).
+
+
+
