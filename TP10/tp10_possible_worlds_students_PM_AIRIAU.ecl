@@ -40,8 +40,8 @@ sub_list([_|X],Z) :- sub_list(X,Z).
 	
 % Question 1.3
 
-proposition1([likes(dana,cody)|X]) :- !.
-proposition1([X|Y]) :- proposition1(Y).
+proposition1([likes(dana,cody)|_]) :- !.
+proposition1([_|Y]) :- proposition1(Y).
 
 
 proposition2([]).
@@ -82,23 +82,48 @@ proposition7(X) :-
 
 % Question 1.4
 
-possible_worlds(X) :- 
-		sub_list([abby, bess, dana, cody], X),
-		proposition1(X),
-		proposition2(X),
-		proposition3(X),
-		proposition4(X),
-		proposition5(X),
-		proposition6(X),
-		proposition7(X).
+possible_worlds(Monde) :- 
+        	make_all_pairs([abby, bess, cody, dana],ListePaires),
+        	sub_list(ListePaires,Monde),
+        	proposition1(Monde),
+        	proposition2(Monde),
+        	proposition3(Monde),
+        	proposition4(Monde),
+        	proposition5(Monde),
+        	proposition6(Monde),
+        	proposition7(Monde).
+
+%Question 1.5
+
+possible_worlds2(Monde) :- 
+        	make_all_pairs([abby, bess, cody, dana],ListePaires),
+        	sub_list(ListePaires,Monde),
+        	proposition1(Monde),
+        	proposition2(Monde),
+        	proposition3(Monde),
+        	proposition4(Monde),
+        	proposition5(Monde),
+        	proposition6(Monde),
+        	proposition7(Monde),
+		is_set(Monde).
+
 
 % Questions 1.6 and 1.7
-/*
+
 test_possible_worlds :-
         possible_worlds(World),
         writeln(World),
         fail.
-*/
+
+% liste 4 personnes : 65 536 solutions (soit 2^16).
+% liste 5 personnes : 33 554 432 (soit près de 2^34).
+% On propose donc une borne inférieure de 2^(2^n).
+
+
+% Question 1.7
+
+% Les résultats du coverage sont légèrement différents. Ceci est dû au fait que les propositions filtrent dans un ordre different les résultats. 
+%Toutefois, le monde des solutions reste identiques,ce qui est normal car l'ordre des propositions n'importe pas ici.
 
 
 /********************************************
@@ -208,6 +233,8 @@ Yes (0.00s cpu, solution 1, maybe more) ? ;
 No (0.00s cpu)
 [eclipse 89]: proposition6([likes(cody, dana), likes(bess, cody)]).
 No (0.00s cpu)
+?- proposition6([likes(dana, abby), likes(bess, abby)]).
+true
 [eclipse 90]: proposition6([likes(cody, dana), likes(bess, cody), likes(dana, cody)]).
 Yes (0.00s cpu, solution 1, maybe more) ? ;
 No (0.00s cpu)
@@ -220,6 +247,80 @@ No (0.00s cpu)
 Yes (0.00s cpu, solution 1, maybe more) ? ;
 No (0.00s cpu)
 
+=========================
+Question 1.4
+=========================
 
+?- possible_worlds(X).
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] ;
+X = [likes(abby, abby), likes(abby, bess), likes(abby, dana), likes(bess, abby), likes(cody, cody), likes(cody, dana), likes(dana, abby), likes(dana, cody), likes(..., ...)] 
+....
+=========================
+Question 1.6
+=========================
+
+test_possible_worlds.
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,cody),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody),likes(dana,dana)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+[likes(abby,abby),likes(abby,bess),likes(abby,dana),likes(bess,abby),likes(cody,dana),likes(dana,abby),likes(dana,cody)]
+...
+==============================================================================
+                               Coverage by File                               
+==============================================================================
+File                                                     Clauses    %Cov %Fail
+==============================================================================
+d:/swipl/library/lists.pl                                     97     2.1   0.0
+d:/swipl/library/test_cover.pl                                22     9.1   4.5
+==============================================================================
 
 */
